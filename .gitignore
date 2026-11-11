@@ -1,0 +1,29 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Local workspaces, artifacts and exchanges (never commit engine output)
+uzen-workspace/
+uzen-worker/
+workspace/
+artifacts/
+exports/
+*.safetensors
+!examples/**/*.safetensors
+
+# Secrets / credentials
+.env
+.env.*
+*.pem
+worker-credentials.json
+
+# OS
+.DS_Store

@@ -1,0 +1,15 @@
+# Blend two compatible parameter sets, then rescale the result.
+#
+# Run with:  uzen job submit examples/blend.request.json --run
+# (the request references this WPL body through the API/SDK; see docs/API.md)
+program "blend_models" {
+    input base: package
+    input other: package
+    param t: float = 0.35
+    param factor: float = 1.0
+
+    step blend = linear_interpolate(base, other, t=t)
+    step result = scale(blend, factor=factor)
+
+    output merged = result
+}

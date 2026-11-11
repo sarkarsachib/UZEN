@@ -1,0 +1,52 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "uzen"
+version = "0.1.0"
+description = "UZEN - Universal Neural Weight Engineering & Architecture Research System (headless computational substrate)"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "Apache-2.0" }
+authors = [{ name = "UZEN" }]
+keywords = ["neural-weights", "weight-engineering", "architecture-synthesis", "model-merging", "strict-plus"]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+
+# The core engine intentionally depends only on numpy + pydantic so that the
+# deterministic mathematical substrate runs anywhere. Everything heavier is an
+# optional extra and is detected at runtime (never faked).
+dependencies = [
+  "numpy>=1.24",
+  "pydantic>=2.5",
+]
+
+[project.optional-dependencies]
+# PyTorch reference runtime: real torch adapter (tensor bridges, state_dict IO,
+# forward execution). Required for .pt/.bin checkpoints and torch modules.
+# Install the CPU-only wheel with:
+#   pip install torch --index-url https://download.pytorch.org/whl/cpu
+torch = ["torch>=2.0"]
+# Headless REST control plane.
+api = ["fastapi>=0.110", "uvicorn>=0.27", "httpx>=0.27"]
+# Read/write reference safetensors implementation (UZEN also ships its own codec).
+safetensors = ["safetensors>=0.4"]
+# ONNX interchange (export/import of the supported NIR subset).
+onnx = ["onnx>=1.16"]
+# Worker daemon remote transport + system profiling.
+workers = ["httpx>=0.27", "psutil>=5.9"]
+dev = ["pytest>=8.0", "pytest-timeout>=2.2", "httpx>=0.27"]
+
+[project.scripts]
+uzen = "uzen.interfaces.cli.main:main"
+
+[tool.setuptools.packages.find]
+include = ["uzen*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+filterwarnings = ["error::RuntimeWarning"]
